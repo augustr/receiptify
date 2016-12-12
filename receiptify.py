@@ -28,10 +28,11 @@ class DBLayer:
             self._connection.close()
 
     def add_unprocessed_receipt(self, filename, data):
-        self._cursor.execute("INSERT INTO receipts_unprocessed(filename, data) VALUES(%s,%s)", (filename, data))
+        self._cursor.execute("INSERT INTO receipts(filename, data) VALUES(%s,%s)", (filename, data))
+        self._connection.commit()
 
     def unprocessed_receipt_exists(self, filename):
-        self._cursor.execute("SELECT id FROM receipts_unprocessed WHERE filename=%s", (filename,))
+        self._cursor.execute("SELECT id FROM receipts WHERE filename=%s", (filename,))
         row = self._cursor.fetchone()
         if row is None:
             return False
